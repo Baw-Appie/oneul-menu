@@ -2,9 +2,11 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, extname, resolve, sep } from "node:path";
+import { createSearchRoute } from "./server/search-route.mjs";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 4173);
+const handleSearch = createSearchRoute({ port });
 const types = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -13,6 +15,10 @@ const types = {
 };
 
 createServer(async (request, response) => {
+  if (request.url?.split("?")[0] === "/api/search") {
+    await handleSearch(request, response);
+    return;
+  }
   if (!["GET", "HEAD"].includes(request.method)) {
     response.writeHead(405, { Allow: "GET, HEAD" }).end();
     return;

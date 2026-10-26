@@ -1,4 +1,5 @@
 import { categories, menus, spiceLabels } from "./data.mjs";
+import { applySearchResults, setupNaturalSearch } from "./ai-search.mjs";
 import {
   STORAGE_KEY,
   createState,
@@ -20,6 +21,18 @@ let lastRecommendedId = null;
 let toastTimeout;
 let storageProblem = false;
 let loadMessage = "";
+let aiSearch;
+
+function getCandidates() {
+  return applySearchResults(
+    filterMenus(state.filters, state.excluded),
+    aiSearch?.state.menuIds ?? null,
+  );
+}
+
+function clearAISearch() {
+  aiSearch?.reset();
+}
 
 try {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -98,7 +111,7 @@ function cardMarkup(menu) {
 }
 
 function renderMenus() {
-  const candidates = filterMenus(state.filters, state.excluded);
+  const candidates = getCandidates();
   $("#menu-grid").innerHTML = candidates.map(cardMarkup).join("");
   $("#match-count").textContent = candidates.length;
   $("#menu-count").textContent = candidates.length;
@@ -152,7 +165,7 @@ function showMenu(menu) {
   $("#result-art").setAttribute("aria-hidden", "true");
   $("#result-meta").textContent =
     `${menu.category} · 예상 ${menu.price.toLocaleString("ko-KR")}원 · ${spiceLabels[menu.spice]}`;
-  const hasAlternative = filterMenus(state.filters, state.excluded).some(
+  const hasAlternative = getCandidates().some(
     (candidate) => candidate.id !== menu.id,
   );
   $("#reroll").disabled = !hasAlternative;
@@ -163,7 +176,7 @@ function showMenu(menu) {
 }
 
 function recommend() {
-  const candidates = filterMenus(state.filters, state.excluded);
+  const candidates = getCandidates();
   const menu = pickMenu(candidates, lastRecommendedId);
   if (menu) showMenu(menu);
   else
@@ -171,6 +184,7 @@ function recommend() {
 }
 
 function resetFilters(event) {
+  clearAISearch();
   state.filters = { ...defaultFilters };
   $("#search").value = "";
   renderMenus();
@@ -186,6 +200,7 @@ for (const key of ["category", "budget", "spice"]) {
   $(`#${key}-options`).addEventListener("click", (event) => {
     const button = event.target.closest(`[data-${key}]`);
     if (!button) return;
+    clearAISearch();
     state.filters[key] =
       key === "budget" ? Number(button.dataset[key]) : button.dataset[key];
     renderMenus();
@@ -195,6 +210,7 @@ for (const key of ["category", "budget", "spice"]) {
 
 $("#search").value = state.filters.search;
 $("#search").addEventListener("input", (event) => {
+  clearAISearch();
   state.filters.search = event.target.value.slice(0, 80);
   renderMenus();
   persist();
@@ -202,6 +218,7 @@ $("#search").addEventListener("input", (event) => {
 $("#reset-filters").addEventListener("click", resetFilters);
 $("#empty-reset").addEventListener("click", resetFilters);
 $("#empty-restore").addEventListener("click", () => {
+  clearAISearch();
   state.excluded = [];
   renderMenus();
   persist();
@@ -218,6 +235,7 @@ $("#menu-grid").addEventListener("click", (event) => {
   if (choose) showMenu(menuById.get(choose.dataset.choose));
   const exclude = event.target.closest("[data-exclude]");
   if (exclude) {
+    clearAISearch();
     const buttons = [...document.querySelectorAll("[data-exclude]")];
     const index = buttons.indexOf(exclude);
     state.excluded = [...new Set([...state.excluded, exclude.dataset.exclude])];
@@ -251,6 +269,7 @@ $("#excluded-panel").addEventListener("click", (event) => {
     );
   else if (event.target.closest("#restore-all")) state.excluded = [];
   else return;
+  clearAISearch();
   renderMenus();
   persist();
   ($("#excluded-panel button") ?? $("#toggle-excluded")).focus({
@@ -295,4 +314,8 @@ $("#history-list").addEventListener("click", (event) => {
 
 renderMenus();
 renderHistory();
+aiSearch = setupNaturalSearch({
+  getCandidates: () => filterMenus(state.filters, state.excluded),
+  onResultsChange: renderMenus,
+});
 if (loadMessage) notify(loadMessage);
