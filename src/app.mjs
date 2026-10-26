@@ -235,9 +235,9 @@ $("#menu-grid").addEventListener("click", (event) => {
   if (choose) showMenu(menuById.get(choose.dataset.choose));
   const exclude = event.target.closest("[data-exclude]");
   if (exclude) {
-    clearAISearch();
     const buttons = [...document.querySelectorAll("[data-exclude]")];
     const index = buttons.indexOf(exclude);
+    clearAISearch();
     state.excluded = [...new Set([...state.excluded, exclude.dataset.exclude])];
     renderMenus();
     const nextButtons = document.querySelectorAll("[data-exclude]");

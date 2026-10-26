@@ -20,7 +20,10 @@ export function validateSearchInput(input) {
     input.candidateIds.length > menus.length ||
     input.candidateIds.some((id) => !catalog.has(id))
   ) {
-    throw new SearchError(400, "검색 문장과 메뉴 조건을 확인해 주세요. 문장은 500자까지 입력할 수 있어요.");
+    throw new SearchError(
+      400,
+      "검색 문장과 메뉴 조건을 확인해 주세요. 문장은 500자까지 입력할 수 있어요.",
+    );
   }
 
   return {
@@ -49,9 +52,18 @@ export function buildSearchRequest(query, candidates) {
     ].join("\n"),
     input: JSON.stringify({
       query,
-      candidates: candidates.map(({ id, name, category, price, spice, description, tags }) => ({
-        id, name, category, price, spice, spiceLabel: spiceLabels[spice], description, tags,
-      })),
+      candidates: candidates.map(
+        ({ id, name, category, price, spice, description, tags }) => ({
+          id,
+          name,
+          category,
+          price,
+          spice,
+          spiceLabel: spiceLabels[spice],
+          description,
+          tags,
+        }),
+      ),
     }),
     text: {
       format: {
@@ -62,10 +74,19 @@ export function buildSearchRequest(query, candidates) {
           type: "object",
           additionalProperties: false,
           properties: {
-            menuIds: { type: "array", items: { type: "string", enum: candidates.map((menu) => menu.id) } },
+            menuIds: {
+              type: "array",
+              items: {
+                type: "string",
+                enum: candidates.map((menu) => menu.id),
+              },
+            },
             summary: { type: "string" },
             maxPrice: { type: ["integer", "null"] },
-            spiceLevels: { type: "array", items: { type: "integer", enum: [0, 1, 2] } },
+            spiceLevels: {
+              type: "array",
+              items: { type: "integer", enum: [0, 1, 2] },
+            },
           },
           required: ["menuIds", "summary", "maxPrice", "spiceLevels"],
         },
@@ -85,65 +106,117 @@ export function validateSearchResult(value, candidates) {
     typeof value.summary !== "string" ||
     !value.summary.trim() ||
     value.summary.length > 220 ||
-    !(value.maxPrice === null || (Number.isInteger(value.maxPrice) && value.maxPrice >= 0)) ||
+    !(
+      value.maxPrice === null ||
+      (Number.isInteger(value.maxPrice) && value.maxPrice >= 0)
+    ) ||
     !Array.isArray(value.spiceLevels) ||
     value.spiceLevels.length === 0 ||
     value.spiceLevels.length > 3 ||
     value.spiceLevels.some((level) => ![0, 1, 2].includes(level))
   ) {
-    throw new SearchError(502, "AI 검색 결과를 확인하지 못했어요. 다시 검색해 주세요.");
+    throw new SearchError(
+      502,
+      "AI 검색 결과를 확인하지 못했어요. 다시 검색해 주세요.",
+    );
   }
 
   const ids = value.menuIds.filter((id) => {
     const menu = allowed.get(id);
-    return (value.maxPrice === null || menu.price <= value.maxPrice)
-      && value.spiceLevels.includes(menu.spice);
+    return (
+      (value.maxPrice === null || menu.price <= value.maxPrice) &&
+      value.spiceLevels.includes(menu.spice)
+    );
   });
   return { menuIds: ids, summary: value.summary.trim(), model: AI_MODEL };
 }
 
-export async function searchWithOpenAI(input, { apiKey, fetchImpl = fetch, timeoutMs = 20000 } = {}) {
+export async function searchWithOpenAI(
+  input,
+  { apiKey, fetchImpl = fetch, timeoutMs = 20000 } = {},
+) {
   const { query, candidates } = validateSearchInput(input);
   if (!candidates.length) {
-    return { menuIds: [], summary: "현재 조건에 맞는 메뉴가 없어요. 조건을 조정해 주세요.", model: AI_MODEL };
+    return {
+      menuIds: [],
+      summary: "현재 조건에 맞는 메뉴가 없어요. 조건을 조정해 주세요.",
+      model: AI_MODEL,
+    };
   }
-  if (!apiKey) throw new SearchError(503, "AI 검색이 아직 준비되지 않았어요. 아래 메뉴 검색을 이용해 주세요.");
+  if (!apiKey)
+    throw new SearchError(
+      503,
+      "AI 검색이 아직 준비되지 않았어요. 아래 메뉴 검색을 이용해 주세요.",
+    );
 
   let response;
   let payload;
   try {
     response = await fetchImpl("https://api.openai.com/v1/responses", {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(buildSearchRequest(query, candidates)),
       signal: AbortSignal.timeout(timeoutMs),
     });
     if (!response.ok) {
-      if (response.status === 429) throw new SearchError(429, "지금은 AI 검색 요청이 많거나 사용 한도에 도달했어요. 잠시 후 다시 시도해 주세요.");
-      if ([401, 403, 404].includes(response.status)) throw new SearchError(503, "AI 검색 연결을 확인하고 있어요. 지금은 아래 메뉴 검색을 이용해 주세요.");
-      throw new SearchError(502, "AI 검색 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.");
+      if (response.status === 429)
+        throw new SearchError(
+          429,
+          "지금은 AI 검색 요청이 많거나 사용 한도에 도달했어요. 잠시 후 다시 시도해 주세요.",
+        );
+      if ([401, 403, 404].includes(response.status))
+        throw new SearchError(
+          503,
+          "AI 검색 연결을 확인하고 있어요. 지금은 아래 메뉴 검색을 이용해 주세요.",
+        );
+      throw new SearchError(
+        502,
+        "AI 검색 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
+      );
     }
     payload = await response.json();
   } catch (error) {
     if (error instanceof SearchError) throw error;
-    if (["TimeoutError", "AbortError"].includes(error.name)) throw new SearchError(504, "검색 시간이 길어지고 있어요. 잠시 후 다시 검색해 주세요.");
-    throw new SearchError(502, "AI 검색 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.");
+    if (["TimeoutError", "AbortError"].includes(error.name))
+      throw new SearchError(
+        504,
+        "검색 시간이 길어지고 있어요. 잠시 후 다시 검색해 주세요.",
+      );
+    throw new SearchError(
+      502,
+      "AI 검색 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    );
   }
 
   if (payload.status !== "completed" || !Array.isArray(payload.output)) {
-    throw new SearchError(502, "AI 검색이 완료되지 않았어요. 다시 검색해 주세요.");
+    throw new SearchError(
+      502,
+      "AI 검색이 완료되지 않았어요. 다시 검색해 주세요.",
+    );
   }
   const content = payload.output
     .filter((item) => item.type === "message" && item.role === "assistant")
-    .flatMap((item) => Array.isArray(item.content) ? item.content : []);
+    .flatMap((item) => (Array.isArray(item.content) ? item.content : []));
   if (content.some((item) => item.type === "refusal")) {
-    throw new SearchError(422, "이 문장으로는 메뉴를 찾기 어려워요. 원하는 음식이나 맛을 알려주세요.");
+    throw new SearchError(
+      422,
+      "이 문장으로는 메뉴를 찾기 어려워요. 원하는 음식이나 맛을 알려주세요.",
+    );
   }
-  const text = content.filter((item) => item.type === "output_text").map((item) => item.text).join("");
+  const text = content
+    .filter((item) => item.type === "output_text")
+    .map((item) => item.text)
+    .join("");
   try {
     return validateSearchResult(JSON.parse(text), candidates);
   } catch (error) {
     if (error instanceof SearchError) throw error;
-    throw new SearchError(502, "AI 검색 결과를 확인하지 못했어요. 다시 검색해 주세요.");
+    throw new SearchError(
+      502,
+      "AI 검색 결과를 확인하지 못했어요. 다시 검색해 주세요.",
+    );
   }
 }

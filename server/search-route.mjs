@@ -9,17 +9,26 @@ function sendJSON(response, status, body) {
   response.end(JSON.stringify(body));
 }
 
-export function createSearchRoute({ apiKey = process.env.OPENAI_API_KEY, port = 4173, search = searchWithOpenAI } = {}) {
+export function createSearchRoute({
+  apiKey = process.env.OPENAI_API_KEY,
+  port = 4173,
+  search = searchWithOpenAI,
+} = {}) {
   let active = 0;
   let requestTimes = [];
   const hosts = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
 
   return async function handleSearch(request, response) {
     const origin = request.headers.origin;
-    if (!hosts.has(request.headers.host)
-      || (origin && origin !== `http://${request.headers.host}`)
-      || (request.headers["sec-fetch-site"] && !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))) {
-      sendJSON(response, 403, { error: "같은 앱 화면에서 다시 검색해 주세요." });
+    if (
+      !hosts.has(request.headers.host) ||
+      (origin && origin !== `http://${request.headers.host}`) ||
+      (request.headers["sec-fetch-site"] &&
+        !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))
+    ) {
+      sendJSON(response, 403, {
+        error: "같은 앱 화면에서 다시 검색해 주세요.",
+      });
       return;
     }
 
@@ -33,19 +42,31 @@ export function createSearchRoute({ apiKey = process.env.OPENAI_API_KEY, port = 
       return;
     }
     if (!apiKey) {
-      sendJSON(response, 503, { error: "AI 검색이 아직 준비되지 않았어요. 아래 메뉴 검색을 이용해 주세요." });
+      sendJSON(response, 503, {
+        error:
+          "AI 검색이 아직 준비되지 않았어요. 아래 메뉴 검색을 이용해 주세요.",
+      });
       return;
     }
-    if (request.headers["content-type"]?.split(";")[0].trim() !== "application/json") {
+    if (
+      request.headers["content-type"]?.split(";")[0].trim() !==
+      "application/json"
+    ) {
       sendJSON(response, 415, { error: "검색 요청 형식을 확인해 주세요." });
       return;
     }
 
     const now = Date.now();
     requestTimes = requestTimes.filter((time) => time > now - 3600000);
-    if (active >= 2 || requestTimes.length >= 60 || requestTimes.filter((time) => time > now - 60000).length >= 6) {
+    if (
+      active >= 2 ||
+      requestTimes.length >= 60 ||
+      requestTimes.filter((time) => time > now - 60000).length >= 6
+    ) {
       response.setHeader("Retry-After", "60");
-      sendJSON(response, 429, { error: "잠시 쉬었다 검색해 주세요. 요청이 너무 빠르게 이어지고 있어요." });
+      sendJSON(response, 429, {
+        error: "잠시 쉬었다 검색해 주세요. 요청이 너무 빠르게 이어지고 있어요.",
+      });
       return;
     }
 
@@ -55,7 +76,11 @@ export function createSearchRoute({ apiKey = process.env.OPENAI_API_KEY, port = 
       const chunks = [];
       for await (const chunk of request.iterator({ destroyOnReturn: false })) {
         size += chunk.length;
-        if (size > 8192) throw new SearchError(413, "검색 문장이 너무 길어요. 500자 이내로 입력해 주세요.");
+        if (size > 8192)
+          throw new SearchError(
+            413,
+            "검색 문장이 너무 길어요. 500자 이내로 입력해 주세요.",
+          );
         chunks.push(chunk);
       }
       let input;
@@ -70,9 +95,13 @@ export function createSearchRoute({ apiKey = process.env.OPENAI_API_KEY, port = 
     } catch (error) {
       request.resume();
       // 공급자의 오류 본문이나 인증 정보를 브라우저 또는 로그에 전달하지 않습니다.
-      if (!response.destroyed) sendJSON(response, error instanceof SearchError ? error.status : 500, {
-        error: error instanceof SearchError ? error.message : "검색을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.",
-      });
+      if (!response.destroyed)
+        sendJSON(response, error instanceof SearchError ? error.status : 500, {
+          error:
+            error instanceof SearchError
+              ? error.message
+              : "검색을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.",
+        });
     } finally {
       active -= 1;
     }

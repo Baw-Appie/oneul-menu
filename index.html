@@ -154,7 +154,9 @@
           <span class="ai-model-badge">✦ GPT-6 Luna</span>
         </div>
         <form id="ai-search-form" aria-busy="false">
-          <label class="sr-only" for="ai-query">원하는 메뉴를 자연어로 설명</label>
+          <label class="sr-only" for="ai-query"
+            >원하는 메뉴를 자연어로 설명</label
+          >
           <div class="ai-input-row">
             <input
               id="ai-query"
@@ -165,22 +167,56 @@
               aria-describedby="ai-privacy ai-status"
               autocomplete="off"
             />
-            <button id="ai-submit" class="primary-button" type="submit" disabled>
+            <button
+              id="ai-submit"
+              class="primary-button"
+              type="submit"
+              disabled
+            >
               AI로 메뉴 찾기 ↗
             </button>
-            <button id="ai-cancel" class="secondary-button" type="button" hidden>취소</button>
+            <button
+              id="ai-cancel"
+              class="secondary-button"
+              type="button"
+              hidden
+            >
+              취소
+            </button>
           </div>
           <div class="ai-examples" aria-label="검색 문장 예시">
             <span>이렇게 말해보세요</span>
-            <button type="button" data-ai-example="만원 이하로 맵지 않은 국물 요리">따뜻하고 순한 국물</button>
-            <button type="button" data-ai-example="7천원 안에서 간단하게 먹을 음식">가볍게, 7천원 안으로</button>
-            <button type="button" data-ai-example="매콤한 음식이 먹고 싶은데 면 요리는 빼줘">매콤하게, 면은 빼고</button>
+            <button
+              type="button"
+              data-ai-example="만원 이하로 맵지 않은 국물 요리"
+            >
+              따뜻하고 순한 국물
+            </button>
+            <button
+              type="button"
+              data-ai-example="7천원 안에서 간단하게 먹을 음식"
+            >
+              가볍게, 7천원 안으로
+            </button>
+            <button
+              type="button"
+              data-ai-example="매콤한 음식이 먹고 싶은데 면 요리는 빼줘"
+            >
+              매콤하게, 면은 빼고
+            </button>
           </div>
           <div class="ai-status-row">
-            <p id="ai-status" role="status" aria-live="polite">AI 검색 연결을 확인하고 있어요.</p>
-            <button id="ai-clear" class="text-button" type="button" hidden>AI 검색 해제</button>
+            <p id="ai-status" role="status" aria-live="polite">
+              AI 검색 연결을 확인하고 있어요.
+            </p>
+            <button id="ai-clear" class="text-button" type="button" hidden>
+              AI 검색 해제
+            </button>
           </div>
-          <p id="ai-privacy" class="ai-privacy">검색하면 입력한 문장과 메뉴 후보가 OpenAI로 전송돼요. 선택 기록은 전송하지 않아요.</p>
+          <p id="ai-privacy" class="ai-privacy">
+            검색하면 입력한 문장과 메뉴 후보가 OpenAI로 전송돼요. 선택 기록은
+            전송하지 않아요.
+          </p>
         </form>
       </section>
 
