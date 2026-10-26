@@ -1,0 +1,36 @@
+// 가격은 기능 시연을 위한 예시 금액이며 실제 식당 판매가가 아닙니다.
+export const categories = ['전체', '한식', '중식', '일식', '양식', '분식', '아시안'];
+export const spiceLabels = ['순한맛', '보통', '매운맛'];
+
+export const menus = [
+  { id: 'bibimbap', name: '비빔밥', category: '한식', price: 9000, spice: 1, emoji: '🥗', color: 'sage', description: '아삭한 채소에 고추장 한 숟갈. 골고루, 든든하게.', tags: ['든든한 한 끼', '채소 가득'] },
+  { id: 'kimchi-stew', name: '김치찌개', category: '한식', price: 9000, spice: 2, emoji: '🥘', color: 'peach', description: '보글보글 잘 익은 김치. 밥 한 공기가 생각나는 맛.', tags: ['뜨끈한 국물', '밥도둑'] },
+  { id: 'pork-cutlet', name: '돈카츠', category: '일식', price: 11000, spice: 0, emoji: '🍱', color: 'butter', description: '바삭한 튀김옷 속 촉촉함. 오늘은 제대로 한 상.', tags: ['바삭바삭', '든든한 한 끼'] },
+  { id: 'pasta', name: '토마토 파스타', category: '양식', price: 13000, spice: 0, emoji: '🍝', color: 'rose', description: '돌돌 감아 먹는 면발에 산뜻한 토마토 소스.', tags: ['기분 전환', '면 요리'] },
+  { id: 'tteokbokki', name: '떡볶이', category: '분식', price: 6000, spice: 2, emoji: '🌶️', color: 'peach', description: '쫄깃한 떡과 달콤매콤 소스. 익숙해서 더 좋은 맛.', tags: ['매콤달콤', '가볍게'] },
+  { id: 'pho', name: '쌀국수', category: '아시안', price: 10000, spice: 0, emoji: '🍜', color: 'sage', description: '맑고 깊은 국물에 부드러운 면. 편안한 한 그릇.', tags: ['뜨끈한 국물', '면 요리'] },
+  { id: 'bulgogi', name: '불고기 덮밥', category: '한식', price: 10000, spice: 0, emoji: '🍚', color: 'butter', description: '달짝지근한 불고기와 따뜻한 밥의 든든한 만남.', tags: ['든든한 한 끼', '단짠단짠'] },
+  { id: 'doenjang', name: '된장찌개', category: '한식', price: 8000, spice: 1, emoji: '🫕', color: 'sage', description: '구수한 된장에 두부와 채소. 생각나는 집밥 한 상.', tags: ['집밥 느낌', '뜨끈한 국물'] },
+  { id: 'gukbap', name: '돼지국밥', category: '한식', price: 10000, spice: 0, emoji: '🍲', color: 'butter', description: '진한 국물에 밥을 말아 후루룩. 속까지 따뜻하게.', tags: ['뜨끈한 국물', '든든한 한 끼'] },
+  { id: 'jeyuk', name: '제육볶음', category: '한식', price: 10000, spice: 2, emoji: '🥓', color: 'peach', description: '매콤한 양념에 볶아낸 고기. 오늘의 밥도둑.', tags: ['매콤하게', '밥도둑'] },
+  { id: 'naengmyeon', name: '물냉면', category: '한식', price: 10000, spice: 0, emoji: '🥣', color: 'sky', description: '시원한 육수와 쫄깃한 면발로 가볍게 기분 전환.', tags: ['시원하게', '면 요리'] },
+  { id: 'jjajang', name: '짜장면', category: '중식', price: 7000, spice: 0, emoji: '🍜', color: 'butter', description: '윤기 나는 짜장 소스에 면발을 쓱쓱 비벼요.', tags: ['면 요리', '단짠단짠'] },
+  { id: 'jjamppong', name: '짬뽕', category: '중식', price: 9000, spice: 2, emoji: '🍜', color: 'peach', description: '얼큰한 국물에 채소와 해산물이 한가득.', tags: ['얼큰하게', '면 요리'] },
+  { id: 'fried-rice', name: '계란 볶음밥', category: '중식', price: 8000, spice: 0, emoji: '🍛', color: 'butter', description: '고슬고슬 볶은 밥에 고소한 계란을 더했어요.', tags: ['고소하게', '든든한 한 끼'] },
+  { id: 'mapo', name: '마파두부 덮밥', category: '중식', price: 9000, spice: 2, emoji: '🍛', color: 'rose', description: '부드러운 두부와 매콤한 소스가 밥 위에 듬뿍.', tags: ['매콤하게', '밥도둑'] },
+  { id: 'tangsuyuk', name: '탕수육', category: '중식', price: 15000, spice: 0, emoji: '🍖', color: 'peach', description: '바삭하게 튀긴 고기에 새콤달콤한 소스 한 입.', tags: ['바삭바삭', '함께 먹기'] },
+  { id: 'sushi', name: '모둠 초밥', category: '일식', price: 15000, spice: 0, emoji: '🍣', color: 'sky', description: '한 점씩 골라 먹는 재미. 조금 특별한 한 끼.', tags: ['기분 전환', '담백하게'] },
+  { id: 'udon', name: '우동', category: '일식', price: 8000, spice: 0, emoji: '🍜', color: 'sage', description: '통통한 면발을 따뜻한 국물과 함께 후루룩.', tags: ['뜨끈한 국물', '면 요리'] },
+  { id: 'ramen', name: '돈코츠 라멘', category: '일식', price: 11000, spice: 0, emoji: '🍜', color: 'butter', description: '진한 육수와 차슈. 한 그릇에 담긴 작은 행복.', tags: ['진한 국물', '면 요리'] },
+  { id: 'curry', name: '일본식 카레', category: '일식', price: 9000, spice: 1, emoji: '🍛', color: 'butter', description: '따뜻한 밥 위에 진한 카레를 넉넉하게.', tags: ['든든한 한 끼', '부드럽게'] },
+  { id: 'burger', name: '수제 버거', category: '양식', price: 11000, spice: 0, emoji: '🍔', color: 'peach', description: '폭신한 번과 도톰한 패티. 크게 한 입 베어 물어요.', tags: ['기분 전환', '든든한 한 끼'] },
+  { id: 'pizza', name: '마르게리타 피자', category: '양식', price: 16000, spice: 0, emoji: '🍕', color: 'rose', description: '토마토, 치즈, 바질. 간단해서 더 맛있는 조합.', tags: ['치즈 가득', '함께 먹기'] },
+  { id: 'sandwich', name: '샌드위치', category: '양식', price: 7000, spice: 0, emoji: '🥪', color: 'sage', description: '빵 사이에 채소와 속재료를 차곡차곡 담았어요.', tags: ['가볍게', '간편하게'] },
+  { id: 'risotto', name: '버섯 리소토', category: '양식', price: 14000, spice: 0, emoji: '🍄', color: 'butter', description: '고소한 크림에 버섯 향을 더한 부드러운 한 접시.', tags: ['고소하게', '부드럽게'] },
+  { id: 'gimbap', name: '김밥', category: '분식', price: 4500, spice: 0, emoji: '🍙', color: 'sage', description: '한 줄 안에 알차게 담은 맛. 바쁜 날에도 든든해요.', tags: ['간편하게', '가볍게'] },
+  { id: 'ramyeon', name: '라면', category: '분식', price: 5000, spice: 2, emoji: '🍜', color: 'peach', description: '꼬들꼬들 면발에 얼큰한 국물. 익숙한 그 맛.', tags: ['얼큰하게', '면 요리'] },
+  { id: 'mandu', name: '찐만두', category: '분식', price: 6000, spice: 0, emoji: '🥟', color: 'butter', description: '따끈한 김이 모락모락. 속이 꽉 찬 한 입.', tags: ['가볍게', '따뜻하게'] },
+  { id: 'pad-thai', name: '팟타이', category: '아시안', price: 12000, spice: 1, emoji: '🍝', color: 'peach', description: '새콤달콤 볶은 쌀국수로 떠나는 작은 미식 여행.', tags: ['색다르게', '면 요리'] },
+  { id: 'nasi-goreng', name: '나시고렝', category: '아시안', price: 11000, spice: 1, emoji: '🍳', color: 'sage', description: '향긋하게 볶은 밥 위에 계란 프라이를 톡.', tags: ['색다르게', '든든한 한 끼'] },
+  { id: 'banh-mi', name: '반미', category: '아시안', price: 8000, spice: 1, emoji: '🥖', color: 'sky', description: '바삭한 바게트에 아삭한 채소. 가볍고 새로운 맛.', tags: ['간편하게', '색다르게'] },
+];

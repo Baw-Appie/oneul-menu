@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbf8f2" />
+    <meta name="description" content="매일 반복되는 메뉴 고민, 이제 그만. 취향과 예산에 맞는 오늘의 한 끼를 가볍게 골라보세요." />
+    <title>오늘 뭐 먹지? — 고민은 짧게, 한 끼는 맛있게</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./src/app.mjs"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#picker">메뉴 선택으로 건너뛰기</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#" aria-label="오늘 뭐 먹지 홈"><span class="brand-mark" aria-hidden="true">m<span>ㆍ</span></span>오늘 뭐 먹지<span class="brand-question">?</span></a>
+        <nav aria-label="주요 메뉴">
+          <a href="#picker" class="nav-primary">메뉴 고르기</a>
+          <a href="#history">선택 기록 <span id="history-count" class="nav-count">0</span></a>
+        </nav>
+        <span class="header-note"><span class="status-dot"></span> 매일의 맛있는 선택</span>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">✳</span> 작은 고민 하나, 덜어드릴게요</p>
+          <h1 id="hero-title">고민은 짧게,<br />한 끼는 <span class="highlight">맛있게.</span></h1>
+          <p class="hero-description">“오늘 뭐 먹지?” 매일 하는 그 고민.<br />지금 끌리는 조건만 고르면, 한 끼를 골라드려요.</p>
+          <div class="hero-footnote"><span class="tiny-plates" aria-hidden="true">🍚 🍜 🥗</span><span>당신의 취향에 맞는 <strong>30가지 메뉴</strong></span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+          <span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✳</span>
+          <div class="food-label label-one">오늘도 잘 챙겨 먹어요 <span>♡</span></div>
+          <img class="hero-bowl" src="./assets/bowl.svg" alt="" width="360" height="320" />
+          <div class="food-label label-two"><span class="label-check">✓</span> 맛있는 선택, 준비 완료!</div>
+          <span class="art-caption">a little less thinking, a little more delicious.</span>
+        </div>
+      </section>
+
+      <section class="picker-panel" id="picker" aria-labelledby="picker-title">
+        <div class="panel-heading"><div><p class="section-kicker">STEP 01 · 취향 고르기</p><h2 id="picker-title">지금, 어떤 메뉴가 끌리세요?</h2></div><button class="text-button" id="reset-filters" type="button"><span aria-hidden="true">↺</span> 조건 초기화</button></div>
+        <div class="filter-row"><span class="filter-label" id="category-label">음식 종류</span><div class="chip-group" id="category-options" role="group" aria-labelledby="category-label"></div></div>
+        <div class="filter-row"><span class="filter-label" id="budget-label">한 끼 예산</span><div class="chip-group" id="budget-options" role="group" aria-labelledby="budget-label"></div></div>
+        <div class="filter-row"><span class="filter-label" id="spice-label">매운맛</span><div class="chip-group" id="spice-options" role="group" aria-labelledby="spice-label"></div></div>
+        <div class="picker-bottom"><p><span class="match-dot"></span> 지금 조건에 맞는 메뉴 <strong id="match-count">30</strong>개</p><button class="primary-button" id="recommend" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(-10 12 12)" /><path d="M8 9h.01M15 8h.01M12 12h.01M9 16h.01M16 15h.01" stroke-width="3" stroke-linecap="round" /></svg>오늘의 메뉴 골라주기<span class="button-arrow" aria-hidden="true">↗</span></button></div>
+      </section>
+
+      <section class="menu-section" id="menus" aria-labelledby="menu-title">
+        <div class="section-heading"><div><p class="section-kicker">STEP 02 · 맛있는 발견</p><h2 id="menu-title">직접 골라도 좋아요 <span id="menu-count" class="count-badge">30</span></h2></div><label class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg><input id="search" type="search" placeholder="어떤 메뉴를 찾으세요?" aria-label="메뉴 이름 또는 설명 검색" maxlength="80" /></label></div>
+        <div class="list-toolbar"><p>끌리는 메뉴를 골라보세요. 원치 않는 메뉴는 잠시 빼둘 수 있어요.</p><button id="toggle-excluded" class="text-button" type="button" aria-expanded="false" aria-controls="excluded-panel">제외한 메뉴 <span id="excluded-count">0</span></button></div>
+        <div id="excluded-panel" class="excluded-panel" hidden></div>
+        <div id="menu-grid" class="menu-grid"></div>
+        <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">🥣</span><h3>조건에 맞는 메뉴가 아직 없어요</h3><p>예산을 조금 높이거나, 검색어와 제외한 메뉴를 확인해 보세요.</p><button id="empty-reset" class="secondary-button" type="button">조건 초기화하기</button></div>
+        <p class="data-note">표시된 금액은 메뉴 선택을 돕기 위한 예시 금액이며, 실제 가격과 매운맛은 식당마다 달라요.</p>
+      </section>
+
+      <section id="history" class="history-section" aria-labelledby="history-title"><div class="section-heading"><div><p class="section-kicker">MY LITTLE FOOD DIARY</p><h2 id="history-title">내가 고른 맛있는 순간들</h2></div><span class="history-note">이 브라우저에 최대 30개 저장</span></div><div id="history-list" class="history-list"></div></section>
+      <aside class="closing-note"><span aria-hidden="true">🍊</span><div><strong>대단한 하루가 아니어도, 한 끼는 맛있게.</strong><p>오늘도 나를 위한 작은 선택을 해보세요.</p></div><span class="closing-flower" aria-hidden="true">✳</span></aside>
+    </main>
+
+    <footer class="site-footer"><a class="footer-brand" href="#">오늘 뭐 먹지?</a><p>메뉴 고민은 가볍게, 먹는 즐거움은 크게.</p><span>MADE FOR YOUR EVERYDAY</span></footer>
+    <dialog id="result-dialog" aria-labelledby="result-title" aria-describedby="result-description"><button class="dialog-close icon-button" id="close-dialog" type="button" aria-label="추천 결과 닫기">✕</button><p class="section-kicker">TODAY’S LITTLE PICK</p><p class="dialog-intro">오늘의 한 끼, 이건 어때요?</p><div id="result-art" class="result-art"></div><h2 id="result-title"></h2><p id="result-description"></p><div id="result-meta" class="result-meta"></div><div class="dialog-actions"><button class="primary-button" id="confirm-menu" type="button">좋아요, 이걸로 결정! <span aria-hidden="true">✓</span></button><button class="secondary-button" id="reroll" type="button">↻ 다른 메뉴 추천받기</button></div><p class="dialog-note">결정한 메뉴만 선택 기록에 남아요.</p></dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>
+    <noscript><p class="noscript-note">이 앱은 JavaScript가 필요합니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+  </body>
+</html>
