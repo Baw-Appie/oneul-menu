@@ -94,7 +94,7 @@ GitHub API에서 `Baw-Appie/oneul-menu`의 공개 범위가 `PUBLIC`, Pages 상�
 | 3 | 한식 필터, “10원 이하로 먹을 수 있는 메뉴” | 결과 0개, 빈 결과 안내, 무작위 추천 비활성화 |
 | 4 | 375px 모바일 화면, 첫 문장을 Enter로 검색 | 돼지국밥 1개. 입력·버튼 가로 넘침 없음 |
 
-키 미설정 시 검색 버튼 비활성화와 기존 메뉴 30개 표시를 브라우저에서 확인했다. `.env`는 Git 무시 대상이며, HTTP 요청 시 `.env`와 `server/ai-search.mjs` 모두 404를 확인했다. 결과 화면은 `screenshots/ai-search-result.jpg`, 모바일 화면은 `screenshots/ai-search-mobile.jpg`에 보존했다.
+키 미설정 시 검색 버튼 비활성화와 기존 메뉴 30개 표시를 브라우저에서 확인했다. `.env`는 Git 무시 대상이며, HTTP 요청 시 `.env`와 `server/ai-search.mjs` 모두 404를 확인했다. 모바일 결과 화면은 `screenshots/ai-search-mobile.jpg`에 보존했다.
 
 AI 상태 초기화가 카드 목록을 다시 그리기 전에 제외 버튼의 순서를 보존하도록 수정했다. 최신 코드를 새로고침한 뒤 김치찌개를 제외했을 때 다음 카드인 불고기 덮밥의 제외 버튼으로 초점이 이동하는 것을 확인하고, 검증용 제외 상태는 복원했다.
 
