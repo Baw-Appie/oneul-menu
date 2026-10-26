@@ -6,6 +6,8 @@
 
 > 인공지능프로그래밍 중간고사 · 기존 실습 결과물 없이 시작한 신규 프로젝트
 
+**[웹앱 실행하기](https://baw-appie.github.io/oneul-menu/)** · **[GitHub Public 저장소](https://github.com/Baw-Appie/oneul-menu)** · **[커밋 내역](https://github.com/Baw-Appie/oneul-menu/commits/main/)**
+
 ![오늘 뭐 먹지 메인 화면](docs/screenshots/desktop.jpg)
 
 ## 1. 제작한 것 소개
@@ -85,6 +87,14 @@ skills/meal-picker-review/SKILL.md   프로젝트 전용 스킬
 5. **제출 준비**: README·스킬·회고 초안 정리, Public 저장소와 실행 주소 확인
 
 작업마다 `단계-순번` 번호와 PRD 근거를 붙였습니다. 처음부터 완료된 프로젝트를 한 번에 커밋하지 않았으며, 최초 계획은 `2318c27`에 보존했습니다.
+
+| 커밋 | 작업 내용 |
+| --- | --- |
+| [2318c27](https://github.com/Baw-Appie/oneul-menu/commit/2318c27) | PRD, 초기 Todo, 검증 스킬 작성 |
+| [5ecb9bf](https://github.com/Baw-Appie/oneul-menu/commit/5ecb9bf) | 반응형 기본 화면과 메뉴 30개 |
+| [2cda38c](https://github.com/Baw-Appie/oneul-menu/commit/2cda38c) | 복합 필터, 추천, 선택 기록과 브라우저 저장 |
+| [942d673](https://github.com/Baw-Appie/oneul-menu/commit/942d673) | 실제 검증 후 키보드 탐색·빈 결과 복원 개선 |
+| [d39d20e](https://github.com/Baw-Appie/oneul-menu/commit/d39d20e) | 과제 README, 스킬 사용 내역, 발표 시연 가이드 |
 
 ## 3. Todo 리스트의 변경 내역
 

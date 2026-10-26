@@ -29,7 +29,7 @@
 ### 5. 제출 준비
 - [x] 5-1. README에 실제 기능·실행법·스킬 내용과 적용 사례 정리 (PRD 7)
 - [x] 5-2. 검증 결과와 한계, 사용자 작성용 회고 초안 기록 (PRD 7)
-- [ ] 5-3. Public 저장소에 단계별 커밋 push 및 실행 링크 확인 (PRD 7)
+- [x] 5-3. Public 저장소에 단계별 커밋 push 및 실행 링크 확인 — [저장소](https://github.com/Baw-Appie/oneul-menu), [실행](https://baw-appie.github.io/oneul-menu/) (PRD 7)
 
 ## Todo 변경 내역
 

@@ -50,6 +50,12 @@
 - 브라우저에서 수집된 error/warn 로그 없음.
 - 검증용으로 생성한 선택 기록은 UI에서 삭제하고 필터를 초기 상태로 복구.
 
+## 미리보기 서버와 공개 배포
+
+로컬 미리보기 서버의 변경 후 `/`와 `/src/core.mjs`는 HTTP 200, 인코딩된 상위 경로를 이용한 `.git/config` 요청은 HTTP 404임을 확인했다.
+
+GitHub API에서 `Baw-Appie/oneul-menu`의 공개 범위가 `PUBLIC`, Pages 상태가 `built`임을 확인했다. 공개 주소 `https://baw-appie.github.io/oneul-menu/`를 브라우저에서 열고 한식·10,000원·순한맛 조건으로 추천을 실행해 돼지국밥과 해당 조건 표시를 확인했다. 공개 주소에서 수집된 error/warn 로그도 없었다. 이후 필터를 초기화했다.
+
 ## 스킬 검증
 
 `meal-picker-review`의 프런트매터, 폴더와 name 일치, description 범위, 예시와 예외 처리를 직접 검토했다. 제공된 `quick_validate.py`는 환경에 PyYAML이 없어 실행되지 않았다. 자동 형식 검증기가 통과했다고 주장하지 않는다. 제품 규칙은 위 로직·브라우저 검증에 실제로 적용했다.
