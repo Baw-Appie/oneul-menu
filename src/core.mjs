@@ -1,4 +1,6 @@
 import { categories, menus } from "./data.mjs";
+import { normalizeRecentDays, filterRecentMeals } from "./recent-meals.mjs";
+import { normalizeFavorites, filterFavorites } from "./favorites.mjs";
 
 export const STORAGE_KEY = "oneul-menu:v1";
 export const defaultFilters = Object.freeze({
@@ -6,6 +8,8 @@ export const defaultFilters = Object.freeze({
   budget: 0,
   spice: "all",
   search: "",
+  recentDays: 0,
+  onlyFavorites: false,
 });
 const knownIds = new Set(menus.map((menu) => menu.id));
 
@@ -14,6 +18,7 @@ export function createState() {
     version: 1,
     filters: { ...defaultFilters },
     excluded: [],
+    favorites: [],
     history: [],
   };
 }
@@ -51,6 +56,9 @@ export function normalizeState(value) {
     clean.filters.spice = filters.spice;
   if (typeof filters.search === "string")
     clean.filters.search = filters.search.slice(0, 80);
+  clean.filters.recentDays = normalizeRecentDays(filters.recentDays);
+  clean.filters.onlyFavorites = filters.onlyFavorites === true;
+  clean.favorites = normalizeFavorites(value.favorites);
   if (Array.isArray(value.excluded))
     clean.excluded = [
       ...new Set(value.excluded.filter((id) => knownIds.has(id))),
@@ -90,6 +98,20 @@ export function filterMenus(filters, excluded = []) {
       (!query || searchable.includes(query))
     );
   });
+}
+
+// 화면·랜덤 추천·두 메뉴 비교·AI 검색이 하나의 후보 집합을 사용합니다.
+export function getMenuCandidates(state, now = new Date()) {
+  return filterRecentMeals(
+    filterFavorites(
+      filterMenus(state.filters, state.excluded),
+      state.favorites,
+      state.filters.onlyFavorites,
+    ),
+    state.history,
+    state.filters.recentDays,
+    now,
+  );
 }
 
 export function pickMenu(candidates, previousId = null, random = Math.random) {

@@ -31,7 +31,8 @@ createServer(async (request, response) => {
     const relative = pathname === "/" ? "index.html" : pathname.slice(1);
     const allowed =
       ["index.html", "styles.css"].includes(relative) ||
-      /^(src|assets)\/[a-zA-Z0-9_-]+\.(mjs|svg)$/.test(relative);
+      /^src\/[a-zA-Z0-9_-]+\.(mjs|css)$/.test(relative) ||
+      /^assets\/[a-zA-Z0-9_-]+\.svg$/.test(relative);
     const path = resolve(root, relative);
 
     if (!allowed || !path.startsWith(`${root}${sep}`)) {

@@ -11,6 +11,9 @@
     <title>오늘 뭐 먹지? — 고민은 짧게, 한 끼는 맛있게</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./src/favorites.css" />
+    <link rel="stylesheet" href="./src/menu-duel.css" />
+    <link rel="stylesheet" href="./src/history-summary.css" />
     <script type="module" src="./src/app.mjs"></script>
   </head>
   <body>
@@ -112,36 +115,64 @@
             aria-labelledby="spice-label"
           ></div>
         </div>
+        <div class="filter-row">
+          <span class="filter-label" id="recent-label">최근 메뉴</span>
+          <div
+            class="chip-group"
+            id="recentDays-options"
+            role="group"
+            aria-labelledby="recent-label"
+            aria-describedby="recent-note"
+          ></div>
+        </div>
+        <p id="recent-note" class="filter-note">
+          오늘을 포함한 기간에 선택한 메뉴를 잠시 빼요. 저장된 최대 30건의 기록을
+          기준으로 해요.
+        </p>
+        <div class="filter-row">
+          <span class="filter-label" id="favorites-label">즐겨찾기</span>
+          <div
+            class="chip-group"
+            id="onlyFavorites-options"
+            role="group"
+            aria-labelledby="favorites-label"
+          ></div>
+        </div>
         <div class="picker-bottom">
           <p>
             <span class="match-dot"></span> 지금 조건에 맞는 메뉴
             <strong id="match-count">30</strong>개
           </p>
-          <button class="primary-button" id="recommend" type="button">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              aria-hidden="true"
-            >
-              <rect
-                x="4"
-                y="4"
-                width="16"
-                height="16"
-                rx="4"
-                transform="rotate(-10 12 12)"
-              />
-              <path
-                d="M8 9h.01M15 8h.01M12 12h.01M9 16h.01M16 15h.01"
-                stroke-width="3"
-                stroke-linecap="round"
-              /></svg
-            >오늘의 메뉴 골라주기<span class="button-arrow" aria-hidden="true"
-              >↗</span
-            >
-          </button>
+          <div class="picker-actions">
+            <button class="secondary-button" id="compare-menus" type="button">
+              두 메뉴 중 고르기
+            </button>
+            <button class="primary-button" id="recommend" type="button">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <rect
+                  x="4"
+                  y="4"
+                  width="16"
+                  height="16"
+                  rx="4"
+                  transform="rotate(-10 12 12)"
+                />
+                <path
+                  d="M8 9h.01M15 8h.01M12 12h.01M9 16h.01M16 15h.01"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
+              </svg>
+              오늘의 메뉴 골라주기
+              <span class="button-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -248,7 +279,7 @@
           /></label>
         </div>
         <div class="list-toolbar">
-          <p>끌리는 메뉴를 골라보세요. 원치 않는 메뉴는 잠시 빼둘 수 있어요.</p>
+          <p>♡로 즐겨찾고, −로 원치 않는 메뉴를 잠시 빼둘 수 있어요.</p>
           <button
             id="toggle-excluded"
             class="text-button"
@@ -264,7 +295,7 @@
         <div id="empty-state" class="empty-state" hidden>
           <span aria-hidden="true">🥣</span>
           <h3>조건에 맞는 메뉴가 아직 없어요</h3>
-          <p>예산을 조금 높이거나, 검색어와 제외한 메뉴를 확인해 보세요.</p>
+          <p>예산·검색어·즐겨찾기와 최근 먹은 메뉴 제외 조건을 확인해 보세요.</p>
           <div class="empty-actions">
             <button id="empty-reset" class="secondary-button" type="button">
               조건 초기화하기</button
@@ -275,6 +306,22 @@
               hidden
             >
               제외한 메뉴 다시 포함
+            </button>
+            <button
+              id="empty-recent"
+              class="secondary-button"
+              type="button"
+              hidden
+            >
+              최근 먹은 메뉴 다시 포함
+            </button>
+            <button
+              id="empty-favorites"
+              class="secondary-button"
+              type="button"
+              hidden
+            >
+              즐겨찾기 밖 메뉴도 보기
             </button>
           </div>
         </div>
@@ -296,6 +343,7 @@
           </div>
           <span class="history-note">이 브라우저에 최대 30개 저장</span>
         </div>
+        <div id="history-summary"></div>
         <div id="history-list" class="history-list"></div>
       </section>
       <aside class="closing-note">

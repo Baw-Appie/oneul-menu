@@ -406,6 +406,11 @@ h2 {
   font-size: 13px;
   font-weight: 650;
 }
+.filter-note {
+  margin: -6px 0 17px 96px;
+  color: var(--muted);
+  font-size: 11px;
+}
 .chip-group {
   display: flex;
   gap: 8px;
@@ -445,7 +450,14 @@ h2 {
   justify-content: space-between;
   padding: 22px 0;
   margin-top: 25px;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.picker-actions {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 .picker-bottom p {
   color: var(--muted);
@@ -1314,6 +1326,9 @@ dialog[open] {
     font-size: 12px;
     margin-bottom: 9px;
   }
+  .filter-note {
+    margin: -8px 0 19px;
+  }
   .chip-group {
     gap: 7px;
   }
@@ -1338,6 +1353,13 @@ dialog[open] {
   .picker-bottom .primary-button {
     width: 100%;
     padding: 14px 10px;
+  }
+  .picker-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .picker-actions .primary-button {
+    grid-row: 1;
   }
   .menu-section {
     padding-top: 36px;

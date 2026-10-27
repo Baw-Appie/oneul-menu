@@ -147,7 +147,7 @@ export function setupNaturalSearch({ getCandidates, onResultsChange }) {
         status.textContent = `AI 검색 결과 ${state.menuIds.length}개 · ${state.summary}`;
       else
         status.textContent =
-          "선택한 종류·예산·매운맛과 제외 메뉴도 함께 반영해요.";
+          "종류·예산·매운맛·즐겨찾기와 최근 메뉴 제외 조건도 함께 반영해요.";
       onResultsChange();
     },
   });
