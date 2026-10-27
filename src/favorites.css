@@ -1,0 +1,47 @@
+.favorite-button {
+  position: absolute;
+  right: 11px;
+  bottom: 10px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #d8cebf;
+  border-radius: 50%;
+  background: #fffefa;
+  color: #756957;
+  box-shadow: 0 2px 6px #604b2612;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.favorite-button:hover {
+  border-color: #c87959;
+  background: #fff5ed;
+  color: #b83e18;
+}
+
+.favorite-button.is-favorite {
+  border-color: #d5896a;
+  background: #fff0e6;
+  color: #b83e18;
+}
+
+.favorite-button.is-favorite:hover {
+  background: #ffe5d5;
+}
+
+.favorite-button:focus-visible {
+  outline: 3px solid #b83e18;
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .favorite-button {
+    right: 7px;
+    bottom: 7px;
+  }
+}
