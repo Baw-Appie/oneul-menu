@@ -12,17 +12,36 @@ function sendJSON(response, status, body) {
 export function createSearchRoute({
   apiKey = process.env.OPENAI_API_KEY,
   port = 4173,
+  appOrigin = process.env.APP_ORIGIN,
   search = searchWithOpenAI,
 } = {}) {
   let active = 0;
   let requestTimes = [];
-  const hosts = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
+  let origins = [`http://127.0.0.1:${port}`, `http://localhost:${port}`];
+  if (appOrigin) {
+    const url = new URL(appOrigin);
+    if (
+      !["http:", "https:"].includes(url.protocol) ||
+      url.username ||
+      url.password ||
+      url.pathname !== "/" ||
+      url.search ||
+      url.hash
+    ) {
+      throw new Error("APP_ORIGIN에는 경로 없는 HTTP 또는 HTTPS 주소를 설정하세요.");
+    }
+    origins = [url.origin];
+  }
+  const allowedOrigins = new Map(
+    origins.map((origin) => [new URL(origin).host, origin]),
+  );
 
   return async function handleSearch(request, response) {
     const origin = request.headers.origin;
+    const allowedOrigin = allowedOrigins.get(request.headers.host);
     if (
-      !hosts.has(request.headers.host) ||
-      (origin && origin !== `http://${request.headers.host}`) ||
+      !allowedOrigin ||
+      (origin && origin !== allowedOrigin) ||
       (request.headers["sec-fetch-site"] &&
         !["same-origin", "none"].includes(request.headers["sec-fetch-site"]))
     ) {

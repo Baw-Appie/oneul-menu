@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: .
+    image: oneul-menu:latest
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${APP_PORT:-4173}:4173"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "4173"
+      NODE_ENV: production
+      APP_ORIGIN: "${APP_ORIGIN:-http://localhost:${APP_PORT:-4173}}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"

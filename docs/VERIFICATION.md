@@ -147,6 +147,33 @@ Node.js v24.11.0과 Codex 내장 브라우저로 확인했다. 기본 서버는 
 - 실제 자정까지 기다려 30초 주기·탭 복귀의 날짜 갱신을 확인하지는 않았다. 기간 계산은 시간대별 순수 함수 검증으로 확인했고, 자동 갱신 연결은 코드 검토했다.
 - 실제 스크린 리더·휴대폰 및 Chrome/Safari/Firefox별 교차 검증은 수행하지 않았다.
 
+## Docker 배포 검증 — 2026-10-29
+
+호스트 Node.js v24.11.0, Docker CLI 29.8.2, Docker Compose 5.6.0과 Colima의 Docker Engine으로 확인했다. 빌드한 `node:24-alpine` 컨테이너의 Node.js는 v24.22.2였다. 실제 `.env`나 API 키를 읽거나 출력하지 않고 빈 키와 `.env.example`을 사용했다. 검증 스크립트는 표준 입력으로만 실행했으며 테스트 파일·패키지는 추가하지 않았다.
+
+### 설정과 서버 회귀 검증
+
+- `docker compose --env-file .env.example config --quiet` 통과.
+- Compose JSON을 표준 입력으로 검사해 기본 포트·바인딩·빈 키·읽기 전용·init 설정, `APP_PORT=8180`과 `BIND_ADDRESS=127.0.0.1` 설정, 별도 HTTPS 도메인 설정을 확인했다. 사용자 키가 출력될 수 있는 기본 `config` 출력은 사용하지 않았다.
+- 실제 `createSearchRoute`에 모의 요청·응답과 모의 검색 함수를 연결한 **44건**이 통과했다. 기존 localhost/127.0.0.1 접근, 키 미설정 503, 메서드 제한, HTTP·HTTPS·별도 포트·IPv6 주소, 허용 Origin의 POST 성공, 다른 Host·Origin·Fetch Metadata 거부, 전달 헤더로 우회 불가, 잘못된 배포 주소의 시작 시 거부를 확인했다. 실제 OpenAI 호출과 구분한다.
+- `node --check server.mjs`, `node --check server/search-route.mjs`, `git diff --check` 통과.
+
+### 이미지와 실제 컨테이너 검증
+
+- `docker build --pull -t oneul-menu:deployment-check .` 성공. Compose도 별도 프로젝트 `oneul-menu-deployment-check`에서 `up -d --build --wait`로 실제 빌드·기동해 `healthy` 상태를 확인했다.
+- 호스트의 `127.0.0.1:14173`에만 공개하고 `APP_ORIGIN=https://menu.example.com`, 빈 키를 설정했다. 컨테이너는 UID 1000으로 실행되며 `/app`에 쓰기를 시도하면 `EROFS`가 발생했다.
+- 이미지의 `/app`에는 `server.mjs`, `index.html`, `styles.css`, `server/`, `src/`, `assets/`만 존재했다. `.env`, Git 이력, 문서와 Docker 설정은 포함되지 않았다.
+- `/`의 GET·HEAD, `styles.css`와 `src/`·`assets/`의 모든 파일이 HTTP 200이었다. `.env`, `.git/config`, 서버 소스, 문서, Dockerfile, 인코딩된 상위 경로 요청은 HTTP 404였다.
+- 실제 HTTP 요청에서 허용된 HTTPS Host·Origin은 API 상태 200, 다른 프로토콜·Host·cross-site 요청은 403, 빈 키의 POST는 503이었다. 호스트에서도 공개 포트에 원래 Host·Origin을 전달해 상태 200을 확인했다.
+- 같은 Compose 프로젝트를 `APP_ORIGIN` 미지정 설정으로 재생성해 다시 `healthy`를 확인했다. `APP_PORT=14173`이 기본 Origin `http://localhost:14173`에 반영되며 해당 주소의 API 상태가 200이었다.
+- 검증 후 임시 Compose 컨테이너와 네트워크는 제거했다. 빌드한 로컬 이미지는 남겨 두었다.
+
+### 이번 검증의 한계
+
+- 실제 도메인·DNS·TLS 인증서·리버스 프록시는 배포하지 않았다. HTTPS Origin 처리는 HTTP 요청의 헤더와 서버 검사로 검증했다.
+- 실제 OpenAI API는 호출하지 않았다. UI가 바뀌는 작업이 아니므로 브라우저 흐름도 재검증하지 않았다.
+- 다중 서버 운영, 영속 사용량 제한, 인증, 장애 후 자동 복구와 장시간 부하 검증은 수행하지 않았다. 런타임 이미지 태그는 이동하므로 이후 빌드의 정확한 패치 버전은 달라질 수 있다.
+
 ## 공통 한계
 
 - Chrome·Safari·Firefox 각각에 대한 별도 교차 검증과 실제 휴대폰 검증은 하지 않았다.

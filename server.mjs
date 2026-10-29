@@ -6,6 +6,7 @@ import { createSearchRoute } from "./server/search-route.mjs";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 4173);
+const host = process.env.HOST || "127.0.0.1";
 const handleSearch = createSearchRoute({ port });
 const types = {
   ".html": "text/html; charset=utf-8",
@@ -50,6 +51,6 @@ createServer(async (request, response) => {
   } catch {
     response.writeHead(404).end("Not found");
   }
-}).listen(port, "127.0.0.1", () => {
-  console.log(`오늘 뭐 먹지? http://127.0.0.1:${port}`);
+}).listen(port, host, () => {
+  console.log(`오늘 뭐 먹지? http://${host}:${port}`);
 });
