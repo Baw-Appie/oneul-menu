@@ -3,6 +3,7 @@ import { applySearchResults, setupNaturalSearch } from "./ai-search.mjs";
 import { favoriteButtonMarkup, toggleFavorite } from "./favorites.mjs";
 import { setupMenuDuel } from "./menu-duel.mjs";
 import { renderHistorySummary } from "./history-summary.mjs";
+import { describeBackup, setupBackup } from "./backup.mjs";
 import {
   STORAGE_KEY,
   createState,
@@ -468,6 +469,24 @@ menuDuel = setupMenuDuel({
   notify,
 });
 menuDuel.refresh();
+setupBackup({
+  getState: () => state,
+  notify,
+  onImport: (nextState, skipped) => {
+    clearAISearch();
+    state = nextState;
+    selectedMenu = null;
+    lastRecommendedId = null;
+    $("#search").value = state.filters.search;
+    renderMenus();
+    renderHistory();
+    notify(
+      !persist()
+        ? "백업을 불러왔지만 브라우저에 저장하지 못했어요. 현재 화면에서만 유지돼요."
+        : `백업에서 ${describeBackup(state)}를 복원했어요.${skipped ? ` 불러오지 않은 항목 ${skipped}개는 제외했어요.` : ""}`,
+    );
+  },
+});
 aiSearch = setupNaturalSearch({
   getCandidates: () => getMenuCandidates(state),
   onResultsChange: renderMenus,

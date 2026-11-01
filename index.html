@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="./src/favorites.css" />
     <link rel="stylesheet" href="./src/menu-duel.css" />
     <link rel="stylesheet" href="./src/history-summary.css" />
+    <link rel="stylesheet" href="./src/backup.css" />
     <script type="module" src="./src/app.mjs"></script>
   </head>
   <body>
@@ -343,6 +344,26 @@
           </div>
           <span class="history-note">이 브라우저에 최대 30개 저장</span>
         </div>
+        <div class="backup-toolbar">
+          <p>
+            기록·즐겨찾기·조건을 파일로 저장해 두거나, 다른 브라우저에서 내보낸
+            파일로 되돌릴 수 있어요.
+          </p>
+          <div class="backup-actions">
+            <button id="backup-export" class="secondary-button" type="button">
+              파일로 내보내기
+            </button>
+            <button id="backup-import" class="secondary-button" type="button">
+              파일에서 불러오기
+            </button>
+          </div>
+          <input
+            id="backup-file"
+            type="file"
+            accept="application/json,.json"
+            hidden
+          />
+        </div>
         <div id="history-summary"></div>
         <div id="history-list" class="history-list"></div>
       </section>
@@ -388,6 +409,39 @@
         </button>
       </div>
       <p class="dialog-note">결정한 메뉴만 선택 기록에 남아요.</p>
+    </dialog>
+    <dialog
+      id="import-dialog"
+      aria-labelledby="import-title"
+      aria-describedby="import-description import-compare import-skipped"
+    >
+      <p class="section-kicker">BACKUP RESTORE</p>
+      <h2 id="import-title" tabindex="-1">이 백업을 불러올까요?</h2>
+      <p id="import-description" class="dialog-intro">
+        지금 이 브라우저에 저장된 기록과 조건이 파일의 내용으로 바뀌어요.
+        되돌릴 수 없으니 필요하면 먼저 내보내 두세요.
+      </p>
+      <dl id="import-compare" class="import-compare">
+        <div>
+          <dt>불러올 파일</dt>
+          <dd id="import-next"></dd>
+        </div>
+        <div>
+          <dt>지금 저장된 내용</dt>
+          <dd id="import-current"></dd>
+        </div>
+      </dl>
+      <p id="import-skipped" class="import-skipped" hidden></p>
+      <div class="dialog-actions">
+        <button class="primary-button" id="import-confirm" type="button">
+          불러오기 <span aria-hidden="true">✓</span></button
+        ><button class="secondary-button" id="import-cancel" type="button">
+          취소
+        </button>
+      </div>
+      <p class="dialog-note">
+        파일을 불러와도 선택 기록은 최대 30건까지만 보관해요.
+      </p>
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
     <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>

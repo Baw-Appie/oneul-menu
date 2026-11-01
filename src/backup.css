@@ -1,0 +1,89 @@
+.backup-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 14px 18px;
+  border: 1px dashed var(--line, #eae5dc);
+  border-radius: 14px;
+  background: var(--white, #fffefa);
+}
+
+.backup-toolbar p {
+  min-width: 0;
+  color: var(--muted, #77736b);
+  font-size: 12px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.backup-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.backup-actions .secondary-button {
+  padding: 10px 15px;
+  font-size: 12px;
+}
+
+.import-compare {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 0;
+  text-align: left;
+}
+
+.import-compare > div {
+  padding: 13px 15px;
+  border: 1px solid var(--line, #eae5dc);
+  border-radius: 12px;
+  background: var(--white, #fffefa);
+}
+
+.import-compare dt {
+  color: var(--muted, #77736b);
+  font-size: 11px;
+}
+
+.import-compare dd {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.import-compare > div:first-child dd {
+  color: var(--orange-dark, #b83e18);
+}
+
+.import-skipped {
+  margin-top: 14px;
+  color: #ae4427;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: left;
+  word-break: keep-all;
+}
+
+#import-dialog .dialog-actions {
+  margin-top: 22px;
+}
+
+@media (max-width: 700px) {
+  .backup-toolbar {
+    display: block;
+    padding: 14px;
+  }
+
+  .backup-actions {
+    margin-top: 12px;
+  }
+
+  .backup-actions .secondary-button {
+    flex: 1;
+  }
+}
