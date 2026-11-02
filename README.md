@@ -86,6 +86,8 @@ server.mjs                         로컬 웹 서버
 server/ai-search.mjs               GPT-6 Luna 호출과 응답 검증
 server/search-route.mjs            API 경로·입력 크기·요청 제한·접속 주소 검사
 assets/                            SVG 그림과 아이콘
+tests/                             node:test 자동 테스트
+.github/workflows/test.yml         GitHub Actions 테스트 실행
 Dockerfile, compose.yaml           컨테이너 이미지와 실행 설정
 .dockerignore                      빌드 컨텍스트 허용 목록
 docs/PRD.md                        제품 요구사항
